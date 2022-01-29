@@ -1,0 +1,31 @@
+using UnityEngine;
+using UnityEngine.Events;
+
+public class Player : MonoBehaviour
+{
+    [SerializeField] private int _maxHealth;
+
+    private int _currentHealth;
+    private int _changedHealth;
+
+    public event UnityAction<int,int,int> HealthChanged;
+
+    private void Start()
+    {
+        _currentHealth = _maxHealth;
+    }
+
+    public void ChangeCurrentHealth (int value)
+    {
+        _changedHealth = _currentHealth + value;
+
+        if (_changedHealth > 100)
+            _changedHealth = 100;
+        else if (_changedHealth < 0)
+            _changedHealth = 0;
+
+        HealthChanged?.Invoke(_currentHealth, _changedHealth, _maxHealth);
+
+        _currentHealth = _changedHealth;
+    }
+}
