@@ -1,0 +1,39 @@
+using System.Collections;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class HealthBar : MonoBehaviour
+{
+    [SerializeField] private Slider _slider;
+    [SerializeField] private Player _player;
+
+    private Coroutine _healthChanger;
+
+    private void OnEnable()
+    {
+        _player.HealthChanged += OnHealthValueChenged;
+    }
+
+    private void OnDisable()
+    {
+        _player.HealthChanged -= OnHealthValueChenged;
+    }
+
+    private void OnHealthValueChenged(int currentHealth, int changedHealth, int maxHealth)
+    {
+        if(_healthChanger != null)
+            StopCoroutine(_healthChanger);
+
+        _healthChanger = StartCoroutine(ChangeHealth(currentHealth, changedHealth, maxHealth));
+    }
+
+    private IEnumerator ChangeHealth(int currentHealth, int changedHealth, int maxHealth)
+    {
+        while (currentHealth != changedHealth)
+        {
+            currentHealth = (int)Mathf.MoveTowards(currentHealth, changedHealth, Time.deltaTime);
+            _slider.value = (float)currentHealth / maxHealth;
+            yield return null;
+        }
+    }
+}
