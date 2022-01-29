@@ -6,6 +6,7 @@ public class HealthBar : MonoBehaviour
 {
     [SerializeField] private Slider _slider;
     [SerializeField] private Player _player;
+    [SerializeField] private float _seconds;
 
     private Coroutine _healthChanger;
 
@@ -33,7 +34,7 @@ public class HealthBar : MonoBehaviour
         {
             currentHealth = (int)Mathf.MoveTowards(currentHealth, changedHealth, Time.deltaTime);
             _slider.value = (float)currentHealth / maxHealth;
-            yield return null;
+            yield return new WaitForSeconds(_seconds);
         }
     }
 }
