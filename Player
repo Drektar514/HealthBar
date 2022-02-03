@@ -15,7 +15,17 @@ public class Player : MonoBehaviour
         _currentHealth = _maxHealth;
     }
 
-    public void ChangeCurrentHealth (int value)
+    public void AddHealth()
+    {
+        ChangeCurrentHealth(10);
+    }
+
+    public void RemoveHealth()
+    {
+        ChangeCurrentHealth(-10);
+    }
+
+    private void ChangeCurrentHealth (int value)
     {
         _changedHealth = _currentHealth + value;
 
