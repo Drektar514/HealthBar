@@ -32,7 +32,11 @@ public class HealthBar : MonoBehaviour
     {
         while (currentHealth != changedHealth)
         {
-            currentHealth = (int)Mathf.MoveTowards(currentHealth, changedHealth, Time.deltaTime);
+            if (changedHealth > currentHealth)
+                currentHealth++;
+            else
+                currentHealth--;
+
             _slider.value = (float)currentHealth / maxHealth;
             yield return new WaitForSeconds(_seconds);
         }
