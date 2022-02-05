@@ -9,36 +9,43 @@ public class HealthBar : MonoBehaviour
     [SerializeField] private float _seconds;
 
     private Coroutine _healthChanger;
+    private WaitForSeconds _waitForSeconds;
+
+    private void Start()
+    {
+        _waitForSeconds = new WaitForSeconds(_seconds);
+    }
 
     private void OnEnable()
     {
-        _player.HealthChanged += OnHealthValueChenged;
+        _player.HealthChanged += OnHealthChenged;
     }
 
     private void OnDisable()
     {
-        _player.HealthChanged -= OnHealthValueChenged;
+        _player.HealthChanged -= OnHealthChenged;
     }
-
-    private void OnHealthValueChenged(int currentHealth, int changedHealth, int maxHealth)
+    
+    private void OnHealthChenged(int value, int changedHealth, int maxHealth)
     {
         if(_healthChanger != null)
             StopCoroutine(_healthChanger);
 
-        _healthChanger = StartCoroutine(ChangeHealth(currentHealth, changedHealth, maxHealth));
+        _healthChanger = StartCoroutine(ChangeHealth(value, changedHealth, maxHealth));
     }
 
-    private IEnumerator ChangeHealth(int currentHealth, int changedHealth, int maxHealth)
+    private IEnumerator ChangeHealth(int value, int changedHealth, int maxHealth)
     {
-        while (currentHealth != changedHealth)
-        {
-            if (changedHealth > currentHealth)
-                currentHealth++;
-            else
-                currentHealth--;
 
-            _slider.value = (float)currentHealth / maxHealth;
-            yield return new WaitForSeconds(_seconds);
+        for (int i = 0; i < 10; i++)
+        {
+            if (value > 0)
+                changedHealth++;
+            else
+                changedHealth--;
+
+            _slider.value = (float)changedHealth / maxHealth;
+            yield return _waitForSeconds;
         }
     }
 }
