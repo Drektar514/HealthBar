@@ -25,26 +25,20 @@ public class HealthBar : MonoBehaviour
     {
         _player.HealthChanged -= OnHealthChenged;
     }
-    
-    private void OnHealthChenged(int value, int changedHealth, int maxHealth)
+
+    private void OnHealthChenged(float value)
     {
-        if(_healthChanger != null)
+        if (_healthChanger != null)
             StopCoroutine(_healthChanger);
 
-        _healthChanger = StartCoroutine(ChangeHealth(value, changedHealth, maxHealth));
+        _healthChanger = StartCoroutine(ChangeHealth(value));
     }
 
-    private IEnumerator ChangeHealth(int value, int changedHealth, int maxHealth)
+    private IEnumerator ChangeHealth(float value)
     {
-
-        for (int i = 0; i < 10; i++)
+        while (_slider.value != value)
         {
-            if (value > 0)
-                changedHealth++;
-            else
-                changedHealth--;
-
-            _slider.value = (float)changedHealth / maxHealth;
+            _slider.value = Mathf.MoveTowards(_slider.value, value, Time.deltaTime);
             yield return _waitForSeconds;
         }
     }
